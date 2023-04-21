@@ -7,7 +7,7 @@ import store from './store'
 import './api/mock'
 
 Vue.config.productionTip = false
-
+Vue.config.devtools = true
 
 Vue.use(ElementUI)
 

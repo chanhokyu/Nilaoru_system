@@ -132,6 +132,8 @@ export default {
         this.$router.push(item.path);
       }
       console.log(this.$route.path);
+
+      this.$store.commit('selectMenu',item)
     },
   },
   computed: {
