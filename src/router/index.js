@@ -6,6 +6,7 @@ import Main from '../views/Main.vue'
 import Mall from '../views/Mall.vue'
 import PageOne from '../views/PageOne.vue'
 import PageTwo from '../views/PageTwo.vue'
+// import Login from '../views/Login.vue'
 Vue.use(VueRouter)
 
 //创建路由组件
@@ -21,26 +22,31 @@ const routes = [
         children: [
             //子路由
             {
-                path: 'home', component: Home
+                path: 'home', name: 'home', component: Home
             },
             {
-                path: 'user', component: User
+                path: 'user', name: 'user', component: User
             },
             {
-                path: 'mall', component: Mall
+                path: 'mall', name: 'mall', component: Mall
             },
             {
-                path: 'page1', component: PageOne
+                path: 'page1', name: 'page1', component: PageOne
             },
             {
-                path: 'page2', component: PageTwo
+                path: 'page2', name: 'page2', component: PageTwo
             }
         ]
     },
+    {
+        path: '/login',
+        name: 'login',
+        component: () => import('@/views/Login.vue')
+    }
 ]
 
 const router = new VueRouter({
-    mode:'hash',
+    mode: 'hash',
     routes
 })
 

@@ -2,14 +2,19 @@
   <div class="header-container">
     <div class="l-content">
       <el-button
+        style="margin-right: 20px"
         @click="handleMenu"
         icon="el-icon-menu"
         size="mini"
       ></el-button>
       <!-- 面包屑 -->
-      <el-breadcrumb separator="/" >
-        <el-breadcrumb-item v-for="item in tags" :key="item.path" :to="{ path: item.path }">{{item.label}}</el-breadcrumb-item>
-
+      <el-breadcrumb separator="/">
+        <el-breadcrumb-item
+          v-for="item in tags"
+          :key="item.path"
+          :to="{ path: item.path }"
+          >{{ item.label }}</el-breadcrumb-item
+        >
       </el-breadcrumb>
     </div>
     <div class="r-content">
@@ -39,10 +44,9 @@ export default {
   computed: {
     //mapState返回一个对象，加...展开
     ...mapState({
-      tags:state=>state.tab.tabList
-    })
+      tags: (state) => state.tab.tabList,
+    }),
   },
-
 };
 </script>
 <style lang="less" scoped>
@@ -65,5 +69,25 @@ export default {
       border-radius: 20%;
     }
   }
+  .l-content {
+    display: flex;
+    align-items: center;
+    ::v-deep .el-breadcrumb__item {
+      .el-breadcrumb__inner {
+        font-weight: normal;
+        &.is-link {
+          color: #666;
+        }
+      }
+      //最后子元素白色高亮未生效！！！
+      &:last-child {
+        .el-breadcrumb__inner {
+          color: #fff;
+        }
+      }
+    }
+  }
 }
 </style>
+
+
