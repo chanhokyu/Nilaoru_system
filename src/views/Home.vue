@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-row>
-      <el-col :span="8" style="padding-right:10px"
+      <el-col :span="8" style="padding-right: 10px"
         ><el-card class="box-card">
           <div class="user">
             <img class="user-img" src="../assets/images/恶灵.jpg" alt="" />
@@ -26,7 +26,7 @@
           </el-table>
         </el-card>
       </el-col>
-      <el-col :span="16" style="padding-left:10px">
+      <el-col :span="16" style="padding-left: 10px">
         <div class="num">
           <el-card
             v-for="item in countData"
@@ -44,12 +44,17 @@
             </div>
           </el-card>
         </div>
-        <el-card style="height:280px">
-         <!-- 折线图 -->
+        <el-card style="height: 280px">
+          <!-- 折线图 -->
+          <div ref="echarts1" style="height: 280px"></div>
         </el-card>
         <div class="graph">
-          <el-card style="height:260px"></el-card>
-          <el-card style="height:260px"></el-card>
+          <el-card style="height: 260px">
+            <div ref="echartsBar" style="height: 260px"></div>
+          </el-card>
+          <el-card style="height: 260px">
+            <div ref="echartsPie" style="height: 220px"></div>
+          </el-card>
         </div>
       </el-col>
     </el-row>
@@ -57,6 +62,7 @@
 </template>
 <script>
 import { getData } from "../api";
+import * as echarts from "echarts";
 export default {
   data() {
     return {
@@ -146,10 +152,117 @@ export default {
   },
   mounted() {
     // console.log('1111111');
-    getData().then(({data}) => {
+    getData().then(({ data }) => {
+      const { tableData } = data.data;
       console.log(data);
-      const {tableData} = data.data
-      console.log(tableData);
+      //基于准备好的dom，初始化echarts实例
+      const echarts1 = echarts.init(this.$refs.echarts1);
+      const echarts2 = echarts.init(this.$refs.echartsBar);
+      const echarts3 = echarts.init(this.$refs.echartsPie);
+      //指定图表的配置项和数据
+      var echarts1Option = {};
+      //处理数据xAxis (x轴的数据)
+      const { orderData, userData , videoData } = data.data;
+      console.log(orderData);
+      console.log(userData);
+      console.log(videoData);
+      const xAxis = Object.keys(orderData.data[0]);
+      console.log(xAxis);
+      const xAxisData = {
+        data: xAxis,
+      };
+      echarts1Option.xAxis = xAxisData;
+      echarts1Option.yAxis = {};
+      echarts1Option.legend = xAxisData;
+      echarts1Option.series = [];
+      xAxis.forEach((key) => {
+        echarts1Option.series.push({
+          name: key,
+          data: orderData.data.map((item) => item[key]),
+          type: "line",
+        });
+      });
+      //根据配置显示图表
+      echarts1.setOption(echarts1Option);
+
+      // 柱形图
+      const xAxisBar = userData.map((item) => item.date);
+      var echartsBar = {
+        legend: {
+          // 图例文字颜色
+          textStyle: {
+            color: "#333",
+          },
+        },
+        grid: {
+          left: "20%",
+        },
+        // 提示框
+        tooltip: {
+          trigger: "axis",
+        },
+        xAxis: {
+          type: "category", // 类目轴
+          data: xAxisBar,
+          axisLine: {
+            lineStyle: {
+              color: "#17b3a3",
+            },
+          },
+          axisLabel: {
+            interval: 0,
+            color: "#333",
+          },
+        },
+        yAxis: [
+          {
+            type: "value",
+            axisLine: {
+              lineStyle: {
+                color: "#17b3a3",
+              },
+            },
+          },
+        ],
+        color: ["#2ec7c9", "#b6a2de"],
+        series: [
+          {
+            name: "新增用户",
+            data: userData.map((item) => item.new),
+            type: "bar",
+          },
+          {
+            name: "活跃用户",
+            data: userData.map((item) => item.active),
+            type: "bar",
+          },
+        ],
+      };
+      //根据配置显示图表
+      echarts2.setOption(echartsBar);
+
+      // 饼状图
+      var echartsPie = {
+        tooltip: {
+          trigger: "item",
+        },
+        color: [
+          "#0f78f4",
+          "#dd536b",
+          "#9462e5",
+          "#a6a6a6",
+          "#e1bb22",
+          "#39c362",
+          "#3ed1cf",
+        ],
+        series: [
+          {
+            type: "pie",
+            data:videoData
+          },
+        ],
+      };
+      echarts3.setOption(echartsPie);
     });
   },
 };
@@ -222,11 +335,11 @@ export default {
     margin-bottom: 20px;
   }
 }
-.graph{
+.graph {
   margin-top: 20px;
   display: flex;
   justify-content: space-between;
-  .el-card{
+  .el-card {
     width: 48%;
   }
 }

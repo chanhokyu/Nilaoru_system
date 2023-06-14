@@ -1,5 +1,5 @@
 <template>
-  <div id="app">
+  <div id="app" v-title data-title="你老儒后台管理系统">
     <!-- <img alt="Vue logo" src="./assets/logo.png">
     <HelloWorld msg="Welcome to Your Vue.js App"/> -->
     <!-- <el-row>
