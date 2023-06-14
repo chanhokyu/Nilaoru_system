@@ -29,6 +29,7 @@
 <script>
 import Mock from "mockjs";
 import Cookie from "js-cookie";
+const axios = require("axios");
 export default {
   data() {
     return {
@@ -42,16 +43,25 @@ export default {
         ],
         password: [{ required: true, trigger: "blur", message: "请输入密码" }],
       },
+      id:"2"
     };
   },
   methods: {
     //登录
     submit() {
       //用Mock假设这里后端返回token信息
-      const token = Mock.Random.guid();
+      // const token = Mock.Random.guid();
       //这里选择存在插件js-cookie用于不同页面间的通信（也可以存在浏览器）
-      Cookie.set("token", token);
-      this.$router.push('/home')
+      // Cookie.set("token", token);
+      // this.$router.push("/home");
+
+      //模拟apifox请求
+      axios.get(`/user/${this.id}`
+      ).then(function (res) {
+        console.log(res.data);
+      }).catch(function(err){
+        console.log(err);
+      })
     },
   },
 };
